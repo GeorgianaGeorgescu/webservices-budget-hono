@@ -1,0 +1,9 @@
+export enum Error {
+    NOT_FOUND = 404,
+    VALIDATION_FAILED = 422,
+    UNAUTHORIZED = 401,
+    FORBIDDEN = 403,
+    INTERNAL_SERVER_ERROR = 500,
+    CONFLICT = 409,
+}
+

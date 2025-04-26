@@ -1,18 +1,22 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
-import { logger } from 'hono/logger'
+import createServer from './createServer';
 
-const app = new Hono()
+async function main() {
+  try {
+    const server = await createServer();
+    
+    await server.start();
 
-app.use(logger())
+    async function onClose() {
+      await server.stop();
+      process.exit(0);
+    }
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+    process.on('SIGTERM', onClose);
+    process.on('SIGQUIT', onClose);
+  } catch (error) {
+    console.error('Error starting the server:', error);
+    process.exit(-1);
+  }
+}
 
-serve({
-  fetch: app.fetch,
-  port: 3000
-}, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`)
-})
+main();

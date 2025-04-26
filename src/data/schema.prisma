@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Place {
+  @@map("places")             // Set the table name to "places"
+
+  id           Int            @id @default(autoincrement()) @db.UnsignedInt
+  name         String         @unique(map: "idx_place_name_unique") @db.VarChar(255)
+  rating       Int?           @db.UnsignedTinyInt
+  transactions Transaction[]
+}
+
+model Transaction {
+  @@map("transactions") // Set the table name to "transactions"
+
+  id       Int          @id @default(autoincrement()) @db.UnsignedInt
+  amount   Int
+  date     DateTime     @db.DateTime(0)
+  user_id  Int          @db.UnsignedInt
+  place_id Int          @db.UnsignedInt
+  place   Place         @relation(fields: [place_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_transaction_place")
+  user    User          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_transaction_user")
+}
+
+model User {
+  @@map("users")               // Set the table name to "users"
+
+  id            Int            @id @default(autoincrement()) @db.UnsignedInt
+  name          String         @db.VarChar(255)
+  email         String         @unique(map: "idx_user_email_unique") @db.VarChar(255)
+  password_hash String         @db.VarChar(255)
+  roles         Json
+  transactions  Transaction[]
+}
