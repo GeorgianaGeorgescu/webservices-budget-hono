@@ -7,8 +7,10 @@ import { Error } from "../core/errors";
 import { z } from 'zod';
 import { zValidator } from '@hono/zod-validator';
 import { makeRequireRole, requireAuthentication } from '../core/auth';
+import { GetAllUsersResponse, GetUserByIdResponse, RegisterUserRequest, UpdateUserRequest, UpdateUserResponse } from '../types/user';
+import { HonoEnv } from '../types/hono';
 
-const checkUserId = async (c: Context, next: () => Promise<void>) => {
+const checkUserId = async (c: Context<HonoEnv>, next: () => Promise<void>) => {
     const session = c.get('session');
     const { userId, roles } = session;
     const { id } = c.req.param();
@@ -22,7 +24,7 @@ const checkUserId = async (c: Context, next: () => Promise<void>) => {
 };
 
 const registerUser = async (c : Context) => {
-    const body = await c.req.json();
+    const body = await c.req.json<RegisterUserRequest>();
     const token = await userService.register(body);
     return c.json({ token }, 200);
 };
@@ -30,18 +32,18 @@ registerUser.validationScheme = z.object({
     name: z.string().max(255),
     email: z.string().email(),    
     password: z.string(), 
-});
+}).strict();
 
 const getAllUsers = async (c : Context) => {
     const users = await userService.getAll();
-    return c.json({ items: users });
+    return c.json<GetAllUsersResponse>({ items: users });
 };
 
-const getUserById = async (c : Context) => {
+const getUserById = async (c : Context<HonoEnv>) => {
     const { id } = c.req.param(); 
     const session = c.get('session');
     const user = await userService.getById(id === 'me' ? session.userId : Number(id));
-    return c.json(user);
+    return c.json<GetUserByIdResponse>(user);
 }
 getUserById.validationScheme =z.object({
     id: z.union([
@@ -52,14 +54,14 @@ getUserById.validationScheme =z.object({
 
 const updateUserById = async (c : Context) => {
     const { id } = c.req.param();
-    const data = await c.req.json();
+    const data = await c.req.json<UpdateUserRequest>();
     const user = await userService.updateById(Number(id), data);
-    return c.json(user);
+    return c.json<UpdateUserResponse>(user);
 };
 updateUserById.validationScheme = z.object({
     name: z.string().max(255),
     email: z.string().email(),    
-});
+}).strict();
 updateUserById.paramsScheme = z.object({
     id: z.coerce.number().int().positive()  
 });
