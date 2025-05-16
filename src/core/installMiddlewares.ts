@@ -44,22 +44,25 @@ export default function installMiddlewares(app: Hono) {
     })
   );
 
-  app.use('*', async (c, next) => {
-    getLogger().info(`⏩ ${c.req.method} ${c.req.url}`);
-    await next();
-    const status = c.res.status;
-    const emoji =
-      status >= 500
-        ? '💀'
-        : status >= 400
-        ? '❌'
-        : status >= 300
-        ? '🔀'
-        : status >= 200
-        ? '✅'
-        : '🔄';
-    getLogger().info(`${emoji} ${c.req.method} ${status} ${c.req.url}`);
-  });
+  const LOG_DISABLED = config.get<boolean>('log.disabled');
+  if (!LOG_DISABLED) {
+    app.use('*', async (c, next) => {
+      getLogger().info(`⏩ ${c.req.method} ${c.req.url}`);
+      await next();
+      const status = c.res.status;
+      const emoji =
+        status >= 500
+          ? '💀'
+          : status >= 400
+          ? '❌'
+          : status >= 300
+          ? '🔀'
+          : status >= 200
+          ? '✅'
+          : '🔄';
+      getLogger().info(`${emoji} ${c.req.method} ${status} ${c.req.url}`);
+    });
+  }
 
   if (!isDevelopment) {
     app.use('*', secureHeaders({

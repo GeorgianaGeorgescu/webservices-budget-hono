@@ -4,6 +4,7 @@ import installSessionRoutes from './session';
 import installUserRoutes from './user';
 import installTransactionRoutes from './transaction';
 import installPlacesRoutes from './place';
+import installHealthRoutes from './health'
 
 export default (app: Hono) => {
   const apiRouter = new HonoApp();
@@ -12,6 +13,7 @@ export default (app: Hono) => {
   installSessionRoutes(apiRouter);
   installTransactionRoutes(apiRouter);
   installPlacesRoutes(apiRouter);
+  installHealthRoutes(apiRouter);
   
   app.route('/api', apiRouter);
 };

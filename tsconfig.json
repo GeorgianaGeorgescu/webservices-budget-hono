@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noEmit": true,
     "target": "ESNext",
     "module": "commonjs",
     "esModuleInterop": true,    
@@ -15,4 +16,8 @@
   "include": [
     "**/*.ts"
   ],
+    "exclude": [
+    "jest.config.ts",
+    "__tests__"
+  ]
 }

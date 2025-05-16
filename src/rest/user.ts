@@ -82,7 +82,6 @@ const installUserRoutes = (parent: HonoInstance) => {
   
     router.post( 
       '/',
-      requireAuthentication,
       zValidator('json', registerUser.validationScheme),
       registerUser
     );
