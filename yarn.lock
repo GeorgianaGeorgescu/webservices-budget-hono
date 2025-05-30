@@ -146,6 +146,11 @@
   resolved "https://registry.yarnpkg.com/@hono/node-server/-/node-server-1.14.1.tgz#a1e21c29b0becde0359371fadf7391746fead4c9"
   integrity sha512-vmbuM+HPinjWzPe7FFPWMMQMsbKE9gDPhaH0FFdqbGpkT5lp++tcWDTxwBl5EgS5y6JVgIaCdjeHRfQ4XRBRjQ==
 
+"@hono/swagger-ui@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@hono/swagger-ui/-/swagger-ui-0.5.1.tgz#9ee8445712451d63505dbdd0eb22ec1cab412570"
+  integrity sha512-XpUCfszLJ9b1rtFdzqOSHfdg9pfBiC2J5piEjuSanYpDDTIwpMz0ciiv5N3WWUaQpz9fEgH8lttQqL41vIFuDA==
+
 "@hono/zod-validator@^0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@hono/zod-validator/-/zod-validator-0.4.3.tgz#f72d68be9e494ec1615cf23fbc1c2cd5dd66fd4b"

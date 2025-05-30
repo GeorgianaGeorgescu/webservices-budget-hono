@@ -5,6 +5,7 @@ import installMiddlewares from './core/installMiddlewares';
 import { initializeData, shutdownData } from './data';
 import installRest from './rest';
 import { getLogger } from './core/logging';
+import { installSwaggerRoutes } from './core/swagger';
 
 const PORT = config.get<number>('port');
 
@@ -19,7 +20,8 @@ export default async function createServer(): Promise<Server> {
 
   installMiddlewares(app);  
   await initializeData();   
-  installRest(app);      
+  installRest(app);
+  installSwaggerRoutes(app);      
 
   return {
     getApp() {
